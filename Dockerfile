@@ -1,12 +1,18 @@
 FROM openshift/jenkins-slave-maven-centos7
 
-RUN pwd
-RUN curl -L  https://github.com/oracle/graal/releases/download/vm-1.0.0-rc5/graalvm-ce-1.0.0-rc5-linux-amd64.tar.gz
-RUN ls -l
-RUN tar xvf graalvm-ce-1.0.0-rc5-linux-amd64.tar.gz
-RUN export GRAALVM_HOME=/path/to/graalvm
+USER root
 
-RUN chown -R 1001:0 $HOME && \
-    chmod -R g+rw $HOME
+ENV GRAALVM_BASE /opt/graalvm
+ENV GRAALVM_HOME $GRAALVM_BASE/graalvm-ce-1.0.0-rc5
+
+RUN mkdir $GRAALVM_BASE
+RUN curl -o $GRAALVM_BASE/graalvm-ce-1.0.0-rc5-linux-amd64.tar.gz  -L  https://github.com/oracle/graal/releases/download/vm-1.0.0-rc5/graalvm-ce-1.0.0-rc5-linux-amd64.tar.gz 
+RUN cd $GRAALVM_BASE && tar xvf $GRAALVM_BASE/graalvm-ce-1.0.0-rc5-linux-amd64.tar.gz --directory $GRAALVM_BASE
+
+RUN ls -l $GRAALVM_HOME
+RUN echo $GRAALVM_HOME
+
+RUN chown -R 1001:0 $GRAALVM_HOME && \
+    chmod -R g+rw $GRAALVM_HOME
 
 USER 1001
