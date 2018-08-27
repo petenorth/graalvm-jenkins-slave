@@ -1,4 +1,4 @@
-FROM openshift/jenkins-slave-maven-centos7
+FROM cloudbees/jnlp-slave-with-java-build-tools
 
 USER root
 
@@ -9,7 +9,7 @@ ENV PATH $JAVA_HOME/bin:$PATH
 
 RUN mkdir $GRAALVM_BASE && curl -o $GRAALVM_BASE/graalvm-ce-1.0.0-rc5-linux-amd64.tar.gz  -L  https://github.com/oracle/graal/releases/download/vm-1.0.0-rc5/graalvm-ce-1.0.0-rc5-linux-amd64.tar.gz && cd $GRAALVM_BASE && tar xvf $GRAALVM_BASE/graalvm-ce-1.0.0-rc5-linux-amd64.tar.gz --directory $GRAALVM_BASE
 
-RUN yum -y groupinstall "Development Tools" && yum -y install zlib1g-dev zlib-devel glibc glibc-static libstdc++-static && yum clean all -y
+RUN apt-get update && apt-get -y install gcc zlib1g-dev
 
 RUN which javac
 
